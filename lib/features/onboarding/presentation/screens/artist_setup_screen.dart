@@ -39,7 +39,16 @@ class _ArtistSetupScreenState extends State<ArtistSetupScreen> {
       listen: false,
     );
     if (connectivityProvider.hasInternet) {
-      await _ytMusic.initialize();
+      try {
+        await _ytMusic.initialize();
+      } catch (e) {
+        if (mounted) {
+          AppSnackBar.showError(
+            context,
+            'Could not reach YouTube Music. Please try again later.',
+          );
+        }
+      }
     } else {
       if (mounted) {
         AppSnackBar.showError(

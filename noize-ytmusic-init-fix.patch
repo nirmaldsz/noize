@@ -1,0 +1,39 @@
+diff --git a/lib/features/favorite_artist/presentation/screens/favorite_artist_screen.dart b/lib/features/favorite_artist/presentation/screens/favorite_artist_screen.dart
+index 728306a..edb5fff 100644
+--- a/lib/features/favorite_artist/presentation/screens/favorite_artist_screen.dart
++++ b/lib/features/favorite_artist/presentation/screens/favorite_artist_screen.dart
+@@ -47,7 +47,11 @@ class _FavoriteArtistsScreenState extends State<FavoriteArtistsScreen>
+   }
+ 
+   Future<void> _initializeYTMusic() async {
+-    await _ytMusic.initialize();
++    try {
++      await _ytMusic.initialize();
++    } catch (e) {
++      debugPrint('YTMusic initialize failed: $e');
++    }
+   }
+ 
+   void _onSearchChanged(String query) {
+diff --git a/lib/features/onboarding/presentation/screens/artist_setup_screen.dart b/lib/features/onboarding/presentation/screens/artist_setup_screen.dart
+index 70851b9..2c05bc9 100644
+--- a/lib/features/onboarding/presentation/screens/artist_setup_screen.dart
++++ b/lib/features/onboarding/presentation/screens/artist_setup_screen.dart
+@@ -39,7 +39,16 @@ class _ArtistSetupScreenState extends State<ArtistSetupScreen> {
+       listen: false,
+     );
+     if (connectivityProvider.hasInternet) {
+-      await _ytMusic.initialize();
++      try {
++        await _ytMusic.initialize();
++      } catch (e) {
++        if (mounted) {
++          AppSnackBar.showError(
++            context,
++            'Could not reach YouTube Music. Please try again later.',
++          );
++        }
++      }
+     } else {
+       if (mounted) {
+         AppSnackBar.showError(

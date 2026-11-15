@@ -47,7 +47,11 @@ class _FavoriteArtistsScreenState extends State<FavoriteArtistsScreen>
   }
 
   Future<void> _initializeYTMusic() async {
-    await _ytMusic.initialize();
+    try {
+      await _ytMusic.initialize();
+    } catch (e) {
+      debugPrint('YTMusic initialize failed: $e');
+    }
   }
 
   void _onSearchChanged(String query) {
